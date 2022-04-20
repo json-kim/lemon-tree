@@ -17,11 +17,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'lemon tree',
-      theme: ThemeData(primaryColor: Colors.blue),
-      home: ResponsiveSizer(
-          builder: (context, orientation, screenType) => const AuthGate()),
+    final focusNode = FocusNode();
+
+    return GestureDetector(
+      onTap: () {
+        final currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.requestFocus(focusNode);
+        }
+      },
+      child: MaterialApp(
+        title: 'lemon tree',
+        theme: ThemeData(primaryColor: Colors.blue),
+        home: ResponsiveSizer(
+            builder: (context, orientation, screenType) => const AuthGate()),
+      ),
     );
   }
 }

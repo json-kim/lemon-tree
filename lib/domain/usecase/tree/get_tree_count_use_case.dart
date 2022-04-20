@@ -10,6 +10,10 @@ class GetTreeCountUseCase {
   Future<Result<TreeCountResponse>> call() async {
     final treeCounts = await _treeRepository.getTreeCount();
 
-    return Result.success(treeCounts);
+    final woodCounts = treeCounts.woodCounts;
+
+    return Result.success(treeCounts.copyWith(
+        woodCounts:
+            woodCounts.where((count) => count.values.first > 0).toList()));
   }
 }

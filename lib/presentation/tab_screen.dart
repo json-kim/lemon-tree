@@ -28,6 +28,7 @@ class _TabScreenState extends State<TabScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
@@ -41,11 +42,11 @@ class _TabScreenState extends State<TabScreen> {
             _currentIndex = idx;
           });
         },
-        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.white.withOpacity(0.8),
+        unselectedItemColor: darkGreen,
         backgroundColor: mainGreen,
         type: BottomNavigationBarType.fixed,
         showUnselectedLabels: true,
-        selectedItemColor: darkGreen,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(

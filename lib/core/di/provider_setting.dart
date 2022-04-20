@@ -2,11 +2,12 @@ import 'package:lemon_tree/data/data_source/local/token_local_data_source.dart';
 import 'package:lemon_tree/data/data_source/remote/auth_api.dart';
 import 'package:lemon_tree/data/data_source/remote/token_api.dart';
 import 'package:lemon_tree/data/repository/auth_repository_impl.dart';
+import 'package:lemon_tree/data/repository/memory_repository_impl.dart';
 import 'package:lemon_tree/data/repository/tree_repository_impl.dart';
-import 'package:lemon_tree/domain/repository/tree_repository.dart';
 import 'package:lemon_tree/domain/usecase/auth/login_with_email_use_case.dart';
 import 'package:lemon_tree/domain/usecase/auth/logout_use_case.dart';
 import 'package:lemon_tree/domain/usecase/auth/sign_up_use_case.dart';
+import 'package:lemon_tree/domain/usecase/memory/add_memory_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_count_use_case.dart';
 import 'package:lemon_tree/presentation/auth/auth_view_model.dart';
 import 'package:lemon_tree/presentation/home/home_view_model.dart';
@@ -23,6 +24,7 @@ Future<List<SingleChildWidget>> setProviders() async {
   final authRepository =
       AuthRepositoryImpl(authApi, tokenApi, tokenLocalDataSource);
   final treeRepository = TreeRepositoryImpl(tokenApi);
+  final memoryRepository = MemoryRepositoryImpl(tokenApi);
 
   // 유스케이스
   final List<SingleChildWidget> useCases = [
@@ -33,10 +35,16 @@ Future<List<SingleChildWidget>> setProviders() async {
 
     // tree
     Provider(create: (context) => GetTreeCountUseCase(treeRepository)),
+
+    // memory
+    Provider(
+      create: (context) => AddMemoryUseCase(memoryRepository),
+    )
   ];
 
   // 뷰모델
   final List<SingleChildWidget> viewModels = [
+    // auth
     ChangeNotifierProvider(
       create: (context) => AuthViewModel(
         context.read<LoginWithEmailUseCase>(),
@@ -44,11 +52,13 @@ Future<List<SingleChildWidget>> setProviders() async {
         context.read<SignUpUseCase>(),
       ),
     ),
+
+    // home
     ChangeNotifierProvider(
       create: (context) => HomeViewModel(
         context.read<GetTreeCountUseCase>(),
       ),
-    )
+    ),
   ];
 
   return [

@@ -26,4 +26,20 @@ class TokenApi {
   Future<void> requestLogOut() async {
     await _tokenDio.post(ApiConstants.memberLogout);
   }
+
+  /// 메모리 추가 요청 메서드
+  /// @param: content(String), woodName(String), themeId(int)
+  /// @return: null
+  Future<void> requestAddMemory(
+      String content, String woodName, int themeId) async {
+    final body = {
+      ApiConstants.content: content,
+      ApiConstants.woodName: woodName,
+      ApiConstants.themeId: themeId,
+      ApiConstants.private: 0,
+    };
+
+    final response =
+        await _tokenDio.post(ApiConstants.memoryInsert, data: body);
+  }
 }
