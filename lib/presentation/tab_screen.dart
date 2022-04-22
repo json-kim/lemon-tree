@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lemon_tree/presentation/constants/colors.dart';
 import 'package:lemon_tree/presentation/home/home_screen.dart';
+import 'package:lemon_tree/presentation/my/my_screen.dart';
+import 'package:lemon_tree/presentation/search/search_screen.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({Key? key}) : super(key: key);
@@ -15,8 +17,8 @@ class _TabScreenState extends State<TabScreen> {
 
   final List<Widget> _pages = [
     const HomeScreen(),
-    Container(),
-    Container(),
+    const SearchScreen(),
+    const MyScreen(),
   ];
 
   @override
