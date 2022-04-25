@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lemon_tree/domain/model/memory.dart';
+import 'package:lemon_tree/domain/usecase/memory/load_memory_with_tree_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_tile_use_case.dart';
 import 'package:lemon_tree/presentation/constants/colors.dart';
 import 'package:lemon_tree/presentation/detail/detail_screen.dart';
+import 'package:lemon_tree/presentation/detail/detail_view_model.dart';
 import 'package:lemon_tree/presentation/map/map_screen.dart';
 import 'package:lemon_tree/presentation/map/map_view_model.dart';
 import 'package:lemon_tree/presentation/search/search_event.dart';
@@ -217,9 +219,19 @@ class _SearchScreenState extends State<SearchScreen> {
                             padding: const EdgeInsets.only(bottom: 16),
                             child: InkWell(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => DetailScreen(),
-                                ));
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChangeNotifierProvider(
+                                      create: (context) => DetailViewModel(
+                                        context
+                                            .read<LoadMemoryWithTreeUseCase>(),
+                                        memory.treeId,
+                                      ),
+                                      child: const DetailScreen(),
+                                    ),
+                                  ),
+                                );
                               },
                               child: Container(
                                 width: double.infinity,

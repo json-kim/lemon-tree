@@ -171,4 +171,19 @@ class TokenApi {
 
     return pagination;
   }
+
+  /// 메모리 요청 메서드
+  /// @param: treeId(int)
+  /// @return: Memory
+  Future<Memory> requestMemoryWithTree(int treeId) async {
+    final params = {
+      ApiConstants.treeId: treeId,
+    };
+
+    final response =
+        await _tokenDio.get(ApiConstants.memoryTree, queryParameters: params);
+    final jsonData = response.data;
+
+    return Memory.fromJson(jsonData);
+  }
 }

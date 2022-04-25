@@ -33,6 +33,7 @@ class ApiConstants {
   static const String treeTile = '/api/tree/tile';
 
   // 메모리 정보 path
+  static const String memoryTree = '/api/memory/tree';
   static const String memoryInsert = '/api/memory/insert';
   static const String memoryInsertWithTree = '/api/memory/insert_with_tree';
   static const String memeoryList = '/api/memory/list';

@@ -45,3 +45,5 @@ final addFormDecoration = InputDecoration(
   fillColor: Colors.white10,
   filled: true,
 );
+
+const defStyle = TextStyle(color: Colors.white);

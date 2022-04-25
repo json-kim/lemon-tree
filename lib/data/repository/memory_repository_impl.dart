@@ -36,4 +36,9 @@ class MemoryRepositoryImpl implements MemoryRepository {
 
     return pageResult;
   }
+
+  @override
+  Future<Memory> loadMemoryWithTree(int treeId) async {
+    return await _tokenApi.requestMemoryWithTree(treeId);
+  }
 }

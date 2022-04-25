@@ -7,6 +7,7 @@ class Memory {
   final String woodName; // 나무 수종 이름
   final String guName; // 나무 위치 구 이름
   final String streetName; // 나무 위치 도로명 이름
+  final String theme;
   final String writerName; // 작성자 닉네임
   final String content; // 작성 내용
   final DateTime createdAt; // 작성 시간
@@ -20,6 +21,7 @@ class Memory {
     required this.woodName,
     required this.guName,
     required this.streetName,
+    required this.theme,
     required this.writerName,
     required this.content,
     required this.createdAt,
@@ -35,6 +37,7 @@ class Memory {
       woodName: json['wood_name'] as String,
       guName: json['gu_name'] as String,
       streetName: json['street_name'] as String,
+      theme: json['theme'] as String,
       writerName: json['name'] as String,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),

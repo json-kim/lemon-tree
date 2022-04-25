@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lemon_tree/domain/usecase/memory/add_memory_use_case.dart';
 import 'package:lemon_tree/domain/usecase/memory/add_memory_with_tree_use_case.dart';
+import 'package:lemon_tree/domain/usecase/memory/load_memory_with_tree_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_count_use_case.dart';
 import 'package:lemon_tree/presentation/add/add_screen.dart';
 import 'package:lemon_tree/presentation/add/add_view_model.dart';
@@ -124,7 +125,11 @@ class _MapScreenState extends State<MapScreen> {
                                             builder: (context) =>
                                                 ChangeNotifierProvider(
                                               create: (context) =>
-                                                  DetailViewModel(),
+                                                  DetailViewModel(
+                                                context.read<
+                                                    LoadMemoryWithTreeUseCase>(),
+                                                tree.id,
+                                              ),
                                               child: const DetailScreen(),
                                             ),
                                           ),

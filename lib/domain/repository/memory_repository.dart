@@ -8,4 +8,6 @@ abstract class MemoryRepository {
 
   Future<Pagination<Memory>> loadMemories(int page,
       {String? woodName, int? themeId});
+
+  Future<Memory> loadMemoryWithTree(int treeId);
 }
