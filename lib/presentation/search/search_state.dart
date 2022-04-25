@@ -4,5 +4,9 @@ part 'search_state.freezed.dart';
 
 @freezed
 class SearchState with _$SearchState {
-  const factory SearchState({@Default(false) bool isLoading}) = _SearchState;
+  const factory SearchState({
+    @Default(false) bool isLoading,
+    int? selectedTheme,
+    String? selectedWood,
+  }) = _SearchState;
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,12 @@ import 'package:provider/provider.dart';
 import 'map_view_model.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+  final LatLng initialLatLng;
+
+  const MapScreen({LatLng? initialLatLng, Key? key})
+      : initialLatLng =
+            initialLatLng ?? const LatLng(37.53418808743609, 126.9908467680216),
+        super(key: key);
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -32,11 +36,6 @@ class _MapScreenState extends State<MapScreen> {
   late BitmapDescriptor treeIcon;
   Timer? _debounce;
   Completer<GoogleMapController> _controller = Completer();
-
-  static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(37.53418808743609, 126.9908467680216),
-    zoom: 19,
-  );
 
   Future<void> _onPosChanged(void Function() requestFunc) async {
     if (_debounce?.isActive ?? false) {
@@ -216,12 +215,16 @@ class _MapScreenState extends State<MapScreen> {
                 )
                 .toSet(),
             mapType: MapType.normal,
-            initialCameraPosition: _initialPosition,
+            initialCameraPosition: CameraPosition(
+              target: widget.initialLatLng,
+              zoom: 19,
+            ),
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
               _customInfoWindowController.googleMapController = controller;
-              viewModel.onEvent(
-                  MapEvent.loadMarkers(37.53418808743609, 126.9908467680216));
+              viewModel.onEvent(MapEvent.loadMarkers(
+                  widget.initialLatLng.latitude,
+                  widget.initialLatLng.longitude));
             },
             onCameraMove: (position) {
               _customInfoWindowController.onCameraMove!();

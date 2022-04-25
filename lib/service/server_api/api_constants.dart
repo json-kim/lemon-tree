@@ -13,6 +13,7 @@ class ApiConstants {
   static const String woodName = 'wood_name';
   static const String guName = 'gu_name';
   static const String treeId = 'tree_id';
+  static const String theme = 'theme';
   static const String themeId = 'theme_id';
   static const String private = 'private';
   static const String tileX = 'tile_x';
@@ -38,4 +39,5 @@ class ApiConstants {
   static const String memoryWoodList = '/api/memory/wood_list';
   static const String memoryGuList = '/api/memory/gu_list';
   static const String memoryThemeList = '/api/memory/theme_list';
+  static const String memoryWoodThemeList = '/api/memory/wood_theme_list';
 }

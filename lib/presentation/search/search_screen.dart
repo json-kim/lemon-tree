@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:lemon_tree/domain/model/memory.dart';
+import 'package:lemon_tree/domain/usecase/tree/get_tree_tile_use_case.dart';
 import 'package:lemon_tree/presentation/constants/colors.dart';
+import 'package:lemon_tree/presentation/detail/detail_screen.dart';
+import 'package:lemon_tree/presentation/map/map_screen.dart';
+import 'package:lemon_tree/presentation/map/map_view_model.dart';
 import 'package:lemon_tree/presentation/search/search_event.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../constants/data.dart';
 import 'search_view_model.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -22,33 +30,30 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: mainGreen,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: null,
-        actions: [
-          IconButton(
-            onPressed: () {
-              // TODO:
-              // 검색 화면
-              // 검색 기능 구현
-            },
-            icon: const Icon(
-              Icons.search_outlined,
-              color: Colors.white,
-            ),
-          )
-        ],
-      ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            child: RefreshIndicator(
-              onRefresh: () async {
-                viewModel.onEvent(const SearchEvent.load());
-              },
-              child: ListView(
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   leading: null,
+      //   actions: [
+      //     IconButton(
+      //       onPressed: () {
+      //         // TODO:
+      //         // 검색 화면
+      //         // 검색 기능 구현
+      //       },
+      //       icon: const Icon(
+      //         Icons.search_outlined,
+      //         color: Colors.white,
+      //       ),
+      //     )
+      //   ],
+      // ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              child: Column(
                 children: [
                   Center(
                       child: Text(
@@ -57,113 +62,221 @@ class _SearchScreenState extends State<SearchScreen> {
                     textAlign: TextAlign.center,
                   )),
                   const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 50.h,
-                      child: Card(
-                        color: Colors.white.withOpacity(0.6),
+                  Row(
+                    children: [
+                      /**
+                       * 테마 셀렉트 버튼
+                       */
+                      Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 24),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '나무',
-                                    style: TextStyle(
-                                        fontSize: 20.sp, color: darkGreen),
-                                  ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text('더 보기'),
-                                    ),
-                                  ),
-                                ],
+                            const Text(
+                              '테마',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: DropdownButton<int>(
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: Colors.white),
+                                isExpanded: true,
+                                dropdownColor: mainGreen,
+                                borderRadius: BorderRadius.circular(8),
+                                underline: Container(),
+                                value: state.selectedTheme,
+                                alignment: Alignment.center,
+                                items: themeMap.keys
+                                    .map(
+                                      (theme) => DropdownMenuItem<int>(
+                                        alignment: Alignment.center,
+                                        value: themeMap[theme],
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            theme,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (val) {
+                                  if (val != null) {
+                                    viewModel
+                                        .onEvent(SearchEvent.themeSelect(val));
+                                  }
+                                },
                               ),
                             ),
-                            Divider(),
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 50.h,
-                      child: Card(
-                        color: Colors.white.withOpacity(0.6),
+                      const SizedBox(width: 16),
+
+                      /**
+                       * 나무 셀렉트 버튼
+                       */
+                      Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 24),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '테마',
-                                    style: TextStyle(
-                                        fontSize: 20.sp, color: darkGreen),
-                                  ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text('더 보기'),
-                                    ),
-                                  ),
-                                ],
+                            const Text(
+                              '나무',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: DropdownButton<String>(
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: Colors.white),
+                                isExpanded: true,
+                                dropdownColor: mainGreen,
+                                borderRadius: BorderRadius.circular(8),
+                                underline: Container(),
+                                value: state.selectedWood,
+                                alignment: Alignment.center,
+                                items: woodData
+                                    .map(
+                                      (wood) => DropdownMenuItem<String>(
+                                        alignment: Alignment.center,
+                                        value: wood,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            wood,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (val) {
+                                  if (val != null) {
+                                    viewModel
+                                        .onEvent(SearchEvent.woodSelect(val));
+                                  }
+                                },
                               ),
                             ),
-                            Divider(),
                           ],
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 50.h,
-                      child: Card(
-                        color: Colors.white.withOpacity(0.6),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 24),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '지역',
-                                    style: TextStyle(
-                                        fontSize: 20.sp, color: darkGreen),
-                                  ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text('더 보기'),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        viewModel.memoryPagingController.refresh();
+                      },
+                      child: PagedListView(
+                        pagingController: viewModel.memoryPagingController,
+                        builderDelegate: PagedChildBuilderDelegate<Memory>(
+                          noItemsFoundIndicatorBuilder: (context) => Column(
+                            children: const [
+                              Text(
+                                '등록된 레몬트리가 없습니다.',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          firstPageErrorIndicatorBuilder: (context) =>
+                              const Center(
+                                  child: Text('가져오기 실패',
+                                      style: TextStyle(color: Colors.white))),
+                          newPageErrorIndicatorBuilder: (context) =>
+                              const Center(
+                                  child: Text('가져오기 실패',
+                                      style: TextStyle(color: Colors.white))),
+                          itemBuilder: (context, memory, index) => Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => DetailScreen(),
+                                ));
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Colors.white10,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'asset/image/lemon.png',
+                                      width: 48,
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(width: 16),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${memory.writerName}님의 레몬트리',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        Text(
+                                          memory.content,
+                                          style: TextStyle(color: Colors.white),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChangeNotifierProvider(
+                                              create: (context) => MapViewModel(
+                                                  context.read<
+                                                      GetTreeTileUseCase>()),
+                                              child: MapScreen(
+                                                initialLatLng: LatLng(
+                                                    memory.lat, memory.lng),
+                                              ),
+                                            ),
+                                          ));
+                                        },
+                                        icon: const Icon(
+                                          Icons.map_outlined,
+                                          color: Colors.white,
+                                        ))
+                                  ],
+                                ),
                               ),
                             ),
-                            Divider(),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -171,15 +284,15 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
             ),
-          ),
 
-          // 로딩 시 로딩 바
-          if (state.isLoading)
-            Container(
-              alignment: Alignment.center,
-              child: const CircularProgressIndicator(),
-            ),
-        ],
+            // 로딩 시 로딩 바
+            if (state.isLoading)
+              Container(
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
+              ),
+          ],
+        ),
       ),
     );
   }

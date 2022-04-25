@@ -9,6 +9,7 @@ import 'package:lemon_tree/domain/usecase/auth/logout_use_case.dart';
 import 'package:lemon_tree/domain/usecase/auth/sign_up_use_case.dart';
 import 'package:lemon_tree/domain/usecase/memory/add_memory_use_case.dart';
 import 'package:lemon_tree/domain/usecase/memory/add_memory_with_tree_use_case.dart';
+import 'package:lemon_tree/domain/usecase/memory/load_memory_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_count_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_tile_use_case.dart';
 import 'package:lemon_tree/presentation/auth/auth_view_model.dart';
@@ -44,6 +45,7 @@ Future<List<SingleChildWidget>> setProviders() async {
     // memory
     Provider(create: (context) => AddMemoryUseCase(memoryRepository)),
     Provider(create: (context) => AddMemoryWithTreeUseCase(memoryRepository)),
+    Provider(create: (context) => LoadMemoryUseCase(memoryRepository)),
   ];
 
   // 뷰모델
@@ -66,7 +68,9 @@ Future<List<SingleChildWidget>> setProviders() async {
 
     // search
     ChangeNotifierProvider(
-      create: (context) => SearchViewModel(),
+      create: (context) => SearchViewModel(
+        context.read<LoadMemoryUseCase>(),
+      ),
     ),
   ];
 
