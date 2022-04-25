@@ -57,4 +57,20 @@ class TokenApi {
     final response =
         await _tokenDio.post(ApiConstants.memoryInsert, data: body);
   }
+
+  /// 메모리 추가(TreeId) 요청 메서드
+  /// @param: content(String), treeId(int), themeId(int)
+  /// @return: null
+  Future<void> requestAddMemoryWithTree(
+      String content, int treeId, int themeId) async {
+    final body = {
+      ApiConstants.content: content,
+      ApiConstants.treeId: treeId,
+      ApiConstants.themeId: themeId,
+      ApiConstants.private: 0,
+    };
+
+    final response =
+        await _tokenDio.post(ApiConstants.memoryInsertWithTree, data: body);
+  }
 }

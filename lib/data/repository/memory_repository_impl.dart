@@ -10,4 +10,10 @@ class MemoryRepositoryImpl implements MemoryRepository {
   Future<void> addMemory(String content, String woodName, int themeId) async {
     await _tokenApi.requestAddMemory(content, woodName, themeId);
   }
+
+  @override
+  Future<void> addMemoryWithTree(
+      String content, int treeId, int themeId) async {
+    await _tokenApi.requestAddMemoryWithTree(content, treeId, themeId);
+  }
 }

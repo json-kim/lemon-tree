@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lemon_tree/domain/model/tree_count_response.dart';
 import 'package:lemon_tree/domain/usecase/memory/add_memory_use_case.dart';
+import 'package:lemon_tree/domain/usecase/memory/add_memory_with_tree_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_count_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_tile_use_case.dart';
 import 'package:lemon_tree/presentation/add/add_screen.dart';
@@ -67,13 +68,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ChangeNotifierProvider(
-                  create: (context) =>
-                      MapViewModel(context.read<GetTreeTileUseCase>()),
-                  child: MapScreen(),
-                ),
-              ));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider(
+                      create: (context) =>
+                          MapViewModel(context.read<GetTreeTileUseCase>()),
+                      child: MapScreen(),
+                    ),
+                  ))
+                  .then((_) => viewModel.onEvent(const HomeEvent.load()));
             },
             icon: const Icon(Icons.map_outlined),
           ),
@@ -197,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               create: (context) => AddViewModel(
                                 context.read<GetTreeCountUseCase>(),
                                 context.read<AddMemoryUseCase>(),
+                                context.read<AddMemoryWithTreeUseCase>(),
                               ),
                               child: const AddScreen(),
                             ),

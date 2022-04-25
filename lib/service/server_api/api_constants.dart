@@ -12,6 +12,7 @@ class ApiConstants {
   static const String memberId = 'member_id';
   static const String woodName = 'wood_name';
   static const String guName = 'gu_name';
+  static const String treeId = 'tree_id';
   static const String themeId = 'theme_id';
   static const String private = 'private';
   static const String tileX = 'tile_x';
@@ -32,6 +33,7 @@ class ApiConstants {
 
   // 메모리 정보 path
   static const String memoryInsert = '/api/memory/insert';
+  static const String memoryInsertWithTree = '/api/memory/insert_with_tree';
   static const String memeoryList = '/api/memory/list';
   static const String memoryWoodList = '/api/memory/wood_list';
   static const String memoryGuList = '/api/memory/gu_list';

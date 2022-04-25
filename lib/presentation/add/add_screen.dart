@@ -104,53 +104,75 @@ class _AddScreenState extends State<AddScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // ******************
+                          // 나무 선택 드랍다운 버튼
+                          // ******************
                           const Text('나무 선택',
                               style: TextStyle(color: Colors.white)),
                           const SizedBox(height: 4),
-                          woodCounts == null
-                              ? const Center(child: CircularProgressIndicator())
-                              : DropdownButtonFormField<String>(
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return '나무를 선택해주세요';
-                                    }
 
-                                    return null;
-                                  },
-                                  icon: const Icon(Icons.arrow_drop_down,
-                                      color: Colors.white),
-                                  isExpanded: true,
-                                  dropdownColor: mainGreen,
-                                  value: state.selectedWood,
-                                  decoration: addFormDecoration,
+                          state.isTreeSelected
+                              ? Container(
+                                  height: 48,
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white10,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                   alignment: Alignment.center,
-                                  items: woodCounts
-                                      .map(
-                                        (count) => DropdownMenuItem<String>(
-                                          alignment: Alignment.center,
-                                          value: count.keys.first,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
+                                  child: Text(
+                                    state.selectedWood ?? '',
+                                    style: TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              : woodCounts == null
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
+                                  : DropdownButtonFormField<String>(
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return '나무를 선택해주세요';
+                                        }
+
+                                        return null;
+                                      },
+                                      icon: const Icon(Icons.arrow_drop_down,
+                                          color: Colors.white),
+                                      isExpanded: true,
+                                      dropdownColor: mainGreen,
+                                      value: state.selectedWood,
+                                      decoration: addFormDecoration,
+                                      alignment: Alignment.center,
+                                      items: woodCounts
+                                          .map(
+                                            (count) => DropdownMenuItem<String>(
+                                              alignment: Alignment.center,
+                                              value: count.keys.first,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  '${count.keys.first} x ${NumberFormat('###,###,###,###').format(count.values.first)}그루',
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
                                             ),
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              '${count.keys.first} x ${NumberFormat('###,###,###,###').format(count.values.first)}그루',
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                  onChanged: (val) {
-                                    if (val != null) {
-                                      viewModel
-                                          .onEvent(AddEvent.woodSelect(val));
-                                    }
-                                  },
-                                ),
+                                          )
+                                          .toList(),
+                                      onChanged: (val) {
+                                        if (val != null) {
+                                          viewModel.onEvent(
+                                              AddEvent.woodSelect(val));
+                                        }
+                                      },
+                                    ),
                           const SizedBox(height: 8),
 
                           // ******************

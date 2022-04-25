@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lemon_tree/domain/model/tree.dart';
 import 'package:lemon_tree/domain/usecase/memory/add_memory_use_case.dart';
+import 'package:lemon_tree/domain/usecase/memory/add_memory_with_tree_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_count_use_case.dart';
 
 import 'add_state.dart';
@@ -11,17 +13,24 @@ import 'add_ui_event.dart';
 class AddViewModel with ChangeNotifier {
   final GetTreeCountUseCase _getTreeCountUseCase;
   final AddMemoryUseCase _addMemoryUseCase;
+  final AddMemoryWithTreeUseCase _addMemoryWithTreeUseCase;
 
   final _streamController = StreamController<AddUiEvent>.broadcast();
   Stream<AddUiEvent> get uiEventStream => _streamController.stream;
 
-  AddState _state = AddState();
+  AddState _state;
   AddState get state => _state;
 
   AddViewModel(
     this._getTreeCountUseCase,
     this._addMemoryUseCase,
-  ) {
+    this._addMemoryWithTreeUseCase, {
+    Tree? tree,
+  }) : _state = AddState(
+          isTreeSelected: tree != null,
+          selectedWood: tree?.woodName,
+          tree: tree,
+        ) {
     _load();
   }
 
@@ -66,6 +75,14 @@ class AddViewModel with ChangeNotifier {
   }
 
   Future<void> _add(String content) async {
+    if (_state.isTreeSelected) {
+      _addWithTreeId(content);
+    } else {
+      _addWithWoodName(content);
+    }
+  }
+
+  Future<void> _addWithWoodName(String content) async {
     _state = _state.copyWith(isLoading: true);
     notifyListeners();
 
@@ -76,6 +93,30 @@ class AddViewModel with ChangeNotifier {
     } else {
       final result =
           await _addMemoryUseCase(content, selectedWood, selectedTheme);
+
+      result.when(
+        success: (_) {
+          _streamController.add(const AddUiEvent.addSuccess());
+        },
+        error: (error) {},
+      );
+    }
+
+    _state = _state.copyWith(isLoading: false);
+    notifyListeners();
+  }
+
+  Future<void> _addWithTreeId(String content) async {
+    _state = _state.copyWith(isLoading: true);
+    notifyListeners();
+
+    final selectedTree = _state.tree;
+    final selectedTheme = _state.selectedTheme;
+    if (selectedTree == null || selectedTheme == null) {
+      _streamController.add(const AddUiEvent.snackBar('값을 다시 입력해주세요'));
+    } else {
+      final result = await _addMemoryWithTreeUseCase(
+          content, selectedTree.id, selectedTheme);
 
       result.when(
         success: (_) {
