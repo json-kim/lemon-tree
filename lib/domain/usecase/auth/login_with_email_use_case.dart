@@ -1,3 +1,4 @@
+import 'package:lemon_tree/core/error/error_api.dart';
 import 'package:lemon_tree/core/result/result.dart';
 import 'package:lemon_tree/domain/repository/auth_repository.dart';
 
@@ -7,8 +8,10 @@ class LoginWithEmailUseCase {
   LoginWithEmailUseCase(this._authRepository);
 
   Future<Result<void>> call(String email, String password) async {
-    final result = await _authRepository.loginWithEmail(email, password);
+    return ErrorApi.handleError(() async {
+      final result = await _authRepository.loginWithEmail(email, password);
 
-    return Result.success(null);
+      return Result.success(null);
+    }, '$runtimeType');
   }
 }

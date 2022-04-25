@@ -44,11 +44,11 @@ class AuthViewModel with ChangeNotifier {
 
     final result = await _loginWithEmailUseCase(email, password);
 
-    result.when(
-        success: (_) {
-          _streamController.add(const AuthUiEvent.snackBar('로그인에 성공했습니다.'));
-        },
-        error: (error) {});
+    result.when(success: (_) {
+      _streamController.add(const AuthUiEvent.snackBar('로그인에 성공했습니다.'));
+    }, error: (error) {
+      _streamController.add(const AuthUiEvent.snackBar('로그인 실패'));
+    });
 
     isLoading = false;
     notifyListeners();
@@ -60,12 +60,12 @@ class AuthViewModel with ChangeNotifier {
 
     final result = await _signUpUseCase(email, password, name);
 
-    result.when(
-        success: (_) {
-          _signUpController.add(const AuthUiEvent.signUpSuccess());
-          _streamController.add(const AuthUiEvent.snackBar('회원가입 되셨습니다.'));
-        },
-        error: (error) {});
+    result.when(success: (_) {
+      _signUpController.add(const AuthUiEvent.signUpSuccess());
+      _streamController.add(const AuthUiEvent.snackBar('회원가입 되셨습니다.'));
+    }, error: (error) {
+      _streamController.add(const AuthUiEvent.snackBar('회원가입에 실패했습니다.'));
+    });
 
     isLoading = false;
     notifyListeners();

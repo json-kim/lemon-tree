@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lemon_tree/core/error/error_api.dart';
 import 'package:lemon_tree/core/page/page.dart';
 import 'package:lemon_tree/core/result/result.dart';
 import 'package:lemon_tree/domain/model/memory.dart';
@@ -11,9 +12,11 @@ class LoadMemoryUseCase {
 
   Future<Result<Pagination<Memory>>> call(int page,
       {String? woodName, int? themeId}) async {
-    final memories = await _memoryRepository.loadMemories(page,
-        woodName: woodName, themeId: themeId);
+    return ErrorApi.handleError(() async {
+      final memories = await _memoryRepository.loadMemories(page,
+          woodName: woodName, themeId: themeId);
 
-    return Result.success(memories);
+      return Result.success(memories);
+    }, '$runtimeType');
   }
 }

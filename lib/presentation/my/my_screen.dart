@@ -10,6 +10,7 @@ import 'package:lemon_tree/presentation/detail/detail_screen.dart';
 import 'package:lemon_tree/presentation/detail/detail_view_model.dart';
 import 'package:lemon_tree/presentation/map/map_screen.dart';
 import 'package:lemon_tree/presentation/map/map_view_model.dart';
+import 'package:lemon_tree/presentation/setting/setting_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -37,7 +38,13 @@ class _MyScreenState extends State<MyScreen> {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SettingScreen(),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.menu_outlined,
               color: Colors.white,
