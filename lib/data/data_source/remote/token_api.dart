@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:lemon_tree/domain/model/tree.dart';
 import 'package:lemon_tree/domain/model/tree_count_response.dart';
 import 'package:lemon_tree/service/server_api/api_constants.dart';
 import 'package:lemon_tree/service/server_api/api_factory.dart';
@@ -18,7 +19,21 @@ class TokenApi {
     return countResponse;
   }
 
-  Future<void> requestTreeCurrentTile() async {}
+  /// 타일별 나무 리스트 요청 메서드
+  /// @param: zoom(int), tileX(int), tileY(int)
+  /// @return: List<Tree>
+  Future<List<Tree>> requestTreeCurrentTile(int tileX, int tileY) async {
+    final params = {
+      ApiConstants.tileX: tileX,
+      ApiConstants.tileY: tileY,
+    };
+
+    final response =
+        await _tokenDio.get(ApiConstants.treeTile, queryParameters: params);
+    final List jsonList = response.data;
+
+    return jsonList.map((json) => Tree.fromJson(json)).toList();
+  }
 
   /// 로그아웃 요청 메서드
   /// @param: null

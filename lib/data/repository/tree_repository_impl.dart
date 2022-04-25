@@ -14,8 +14,7 @@ class TreeRepositoryImpl implements TreeRepository {
   }
 
   @override
-  Future<List<Tree>> getTreeList(int zoom, int tileX, int tileY) {
-    // TODO: implement getTreeList
-    throw UnimplementedError();
+  Future<List<Tree>> getTreeList(int zoom, int tileX, int tileY) async {
+    return await _tokenApi.requestTreeCurrentTile(tileX, tileY);
   }
 }

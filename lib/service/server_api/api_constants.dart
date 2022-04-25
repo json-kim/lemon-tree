@@ -14,6 +14,8 @@ class ApiConstants {
   static const String guName = 'gu_name';
   static const String themeId = 'theme_id';
   static const String private = 'private';
+  static const String tileX = 'tile_x';
+  static const String tileY = 'tile_y';
   static const String page = 'page';
   static const String refreshToken = 'refresh_token';
 
@@ -26,6 +28,7 @@ class ApiConstants {
   // 나무 정보 path
   static const String treeList = '/api/tree/tree_list';
   static const String treeCount = '/api/tree/count';
+  static const String treeTile = '/api/tree/tile';
 
   // 메모리 정보 path
   static const String memoryInsert = '/api/memory/insert';

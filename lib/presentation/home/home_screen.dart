@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lemon_tree/domain/model/tree_count_response.dart';
 import 'package:lemon_tree/domain/usecase/memory/add_memory_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_count_use_case.dart';
+import 'package:lemon_tree/domain/usecase/tree/get_tree_tile_use_case.dart';
 import 'package:lemon_tree/presentation/add/add_screen.dart';
 import 'package:lemon_tree/presentation/add/add_view_model.dart';
 import 'package:lemon_tree/presentation/constants/colors.dart';
@@ -10,6 +11,8 @@ import 'package:lemon_tree/presentation/constants/data.dart';
 import 'package:lemon_tree/presentation/constants/offset.dart';
 import 'package:lemon_tree/presentation/home/home_event.dart';
 import 'package:lemon_tree/presentation/home/home_view_model.dart';
+import 'package:lemon_tree/presentation/map/map_screen.dart';
+import 'package:lemon_tree/presentation/map/map_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -63,7 +66,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider(
+                  create: (context) =>
+                      MapViewModel(context.read<GetTreeTileUseCase>()),
+                  child: MapScreen(),
+                ),
+              ));
+            },
             icon: const Icon(Icons.map_outlined),
           ),
         ],
