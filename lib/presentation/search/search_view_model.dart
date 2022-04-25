@@ -32,6 +32,7 @@ class SearchViewModel with ChangeNotifier {
 
   @override
   void dispose() {
+    _memoryPagingController.dispose();
     _streamController.close();
     super.dispose();
   }

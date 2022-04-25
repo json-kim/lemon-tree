@@ -5,6 +5,7 @@ import 'package:lemon_tree/domain/model/memory.dart';
 import 'package:lemon_tree/domain/usecase/memory/load_memory_with_tree_use_case.dart';
 import 'package:lemon_tree/domain/usecase/tree/get_tree_tile_use_case.dart';
 import 'package:lemon_tree/presentation/constants/colors.dart';
+import 'package:lemon_tree/presentation/constants/ui_constants.dart';
 import 'package:lemon_tree/presentation/detail/detail_screen.dart';
 import 'package:lemon_tree/presentation/detail/detail_view_model.dart';
 import 'package:lemon_tree/presentation/map/map_screen.dart';
@@ -75,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           children: [
                             const Text(
                               '테마',
-                              style: TextStyle(color: Colors.white),
+                              style: defStyle,
                             ),
                             const SizedBox(height: 4),
                             Container(
@@ -108,8 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                           alignment: Alignment.center,
                                           child: Text(
                                             theme,
-                                            style: const TextStyle(
-                                                color: Colors.white),
+                                            style: defStyle,
                                           ),
                                         ),
                                       ),
@@ -137,7 +137,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           children: [
                             const Text(
                               '나무',
-                              style: TextStyle(color: Colors.white),
+                              style: defStyle,
                             ),
                             const SizedBox(height: 4),
                             Container(
@@ -170,8 +170,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                           alignment: Alignment.center,
                                           child: Text(
                                             wood,
-                                            style: const TextStyle(
-                                                color: Colors.white),
+                                            style: defStyle,
                                           ),
                                         ),
                                       ),
@@ -203,18 +202,16 @@ class _SearchScreenState extends State<SearchScreen> {
                             children: const [
                               Text(
                                 '등록된 레몬트리가 없습니다.',
-                                style: TextStyle(color: Colors.white),
+                                style: defStyle,
                               ),
                             ],
                           ),
                           firstPageErrorIndicatorBuilder: (context) =>
                               const Center(
-                                  child: Text('가져오기 실패',
-                                      style: TextStyle(color: Colors.white))),
+                                  child: Text('가져오기 실패', style: defStyle)),
                           newPageErrorIndicatorBuilder: (context) =>
                               const Center(
-                                  child: Text('가져오기 실패',
-                                      style: TextStyle(color: Colors.white))),
+                                  child: Text('가져오기 실패', style: defStyle)),
                           itemBuilder: (context, memory, index) => Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: InkWell(
@@ -254,11 +251,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                       children: [
                                         Text(
                                           '${memory.writerName}님의 레몬트리',
-                                          style: TextStyle(color: Colors.white),
+                                          style: defStyle,
                                         ),
                                         Text(
                                           memory.content,
-                                          style: TextStyle(color: Colors.white),
+                                          style: defStyle,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ],

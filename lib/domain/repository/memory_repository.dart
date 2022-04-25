@@ -9,5 +9,7 @@ abstract class MemoryRepository {
   Future<Pagination<Memory>> loadMemories(int page,
       {String? woodName, int? themeId});
 
+  Future<Pagination<Memory>> loadMyMemories(int page);
+
   Future<Memory> loadMemoryWithTree(int treeId);
 }

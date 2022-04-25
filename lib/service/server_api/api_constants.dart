@@ -36,7 +36,8 @@ class ApiConstants {
   static const String memoryTree = '/api/memory/tree';
   static const String memoryInsert = '/api/memory/insert';
   static const String memoryInsertWithTree = '/api/memory/insert_with_tree';
-  static const String memeoryList = '/api/memory/list';
+  static const String memoryList = '/api/memory/list';
+  static const String memoryMyList = '/api/memory/my_list';
   static const String memoryWoodList = '/api/memory/wood_list';
   static const String memoryGuList = '/api/memory/gu_list';
   static const String memoryThemeList = '/api/memory/theme_list';

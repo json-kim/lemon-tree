@@ -86,7 +86,30 @@ class TokenApi {
     };
 
     final response =
-        await _tokenDio.get(ApiConstants.memeoryList, queryParameters: params);
+        await _tokenDio.get(ApiConstants.memoryList, queryParameters: params);
+
+    final jsonData = response.data;
+    final List jsonMeories = jsonData['result'];
+    final memories = jsonMeories.map((json) => Memory.fromJson(json)).toList();
+
+    final pagination = Pagination(
+        currentPage: jsonData['current_page'] as int,
+        lastPage: jsonData['total_page'] as int,
+        items: memories);
+
+    return pagination;
+  }
+
+  /// 내가 작성한 메모리 리스트 요청 메서드
+  /// @param: page(int)
+  /// @return: Pagination<Memory>
+  Future<Pagination<Memory>> requestMyMemories(int page) async {
+    final params = {
+      ApiConstants.page: page,
+    };
+
+    final response =
+        await _tokenDio.get(ApiConstants.memoryMyList, queryParameters: params);
 
     final jsonData = response.data;
     final List jsonMeories = jsonData['result'];
