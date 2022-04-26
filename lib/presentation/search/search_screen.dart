@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -96,25 +97,41 @@ class _SearchScreenState extends State<SearchScreen> {
                                 underline: Container(),
                                 value: state.selectedTheme,
                                 alignment: Alignment.center,
-                                items: themeMap.keys
-                                    .map(
-                                      (theme) => DropdownMenuItem<int>(
-                                        alignment: Alignment.center,
-                                        value: themeMap[theme],
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
+                                items: [
+                                  DropdownMenuItem<int>(
+                                    alignment: Alignment.center,
+                                    value: null,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        '전체',
+                                        style: defStyle,
+                                      ),
+                                    ),
+                                  ),
+                                  ...themeMap.keys
+                                      .map(
+                                        (theme) => DropdownMenuItem<int>(
                                           alignment: Alignment.center,
-                                          child: Text(
-                                            theme,
-                                            style: defStyle,
+                                          value: themeMap[theme],
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              theme,
+                                              style: defStyle,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                    .toList(),
+                                      )
+                                      .toList()
+                                ],
                                 onChanged: (val) {
                                   if (val != null) {
                                     viewModel
@@ -157,25 +174,41 @@ class _SearchScreenState extends State<SearchScreen> {
                                 underline: Container(),
                                 value: state.selectedWood,
                                 alignment: Alignment.center,
-                                items: woodData
-                                    .map(
-                                      (wood) => DropdownMenuItem<String>(
-                                        alignment: Alignment.center,
-                                        value: wood,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
+                                items: [
+                                  DropdownMenuItem<String>(
+                                    alignment: Alignment.center,
+                                    value: null,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        '전체',
+                                        style: defStyle,
+                                      ),
+                                    ),
+                                  ),
+                                  ...woodData
+                                      .map(
+                                        (wood) => DropdownMenuItem<String>(
                                           alignment: Alignment.center,
-                                          child: Text(
-                                            wood,
-                                            style: defStyle,
+                                          value: wood,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              wood,
+                                              style: defStyle,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                    .toList(),
+                                      )
+                                      .toList()
+                                ],
                                 onChanged: (val) {
                                   if (val != null) {
                                     viewModel
@@ -190,6 +223,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
+
+                  /**
+                   * 레몬트리 리스트 박스
+                   */
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {
@@ -240,10 +277,17 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                                 child: Row(
                                   children: [
-                                    Image.asset(
-                                      'asset/image/lemon.png',
-                                      width: 48,
-                                    ),
+                                    memory.url != ''
+                                        ? CachedNetworkImage(
+                                            imageUrl: memory.url,
+                                            width: 48,
+                                            height: 64,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.asset(
+                                            'asset/image/lemon.png',
+                                            width: 48,
+                                          ),
                                     const SizedBox(width: 16),
                                     Column(
                                       crossAxisAlignment:

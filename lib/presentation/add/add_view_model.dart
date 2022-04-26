@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:lemon_tree/domain/model/tree.dart';
@@ -43,9 +44,21 @@ class AddViewModel with ChangeNotifier {
   void onEvent(AddEvent event) {
     event.when(
         load: _load,
+        imageSelect: _imageSelect,
+        imageDelete: _imageDelete,
         woodSelect: _woodSelect,
         themeSelect: _themeSelect,
         add: _add);
+  }
+
+  void _imageSelect(File image) {
+    _state = _state.copyWith(selectedImage: image);
+    notifyListeners();
+  }
+
+  void _imageDelete() {
+    _state = _state.copyWith(selectedImage: null);
+    notifyListeners();
   }
 
   void _woodSelect(String woodName) {
@@ -91,8 +104,9 @@ class AddViewModel with ChangeNotifier {
     if (selectedWood == null || selectedTheme == null) {
       _streamController.add(const AddUiEvent.snackBar('값을 다시 입력해주세요'));
     } else {
-      final result =
-          await _addMemoryUseCase(content, selectedWood, selectedTheme);
+      final result = await _addMemoryUseCase(
+          content, selectedWood, selectedTheme,
+          image: _state.selectedImage);
 
       result.when(
         success: (_) {
@@ -116,7 +130,8 @@ class AddViewModel with ChangeNotifier {
       _streamController.add(const AddUiEvent.snackBar('값을 다시 입력해주세요'));
     } else {
       final result = await _addMemoryWithTreeUseCase(
-          content, selectedTree.id, selectedTheme);
+          content, selectedTree.id, selectedTheme,
+          image: _state.selectedImage);
 
       result.when(
         success: (_) {

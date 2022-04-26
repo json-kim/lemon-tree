@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -111,10 +112,17 @@ class _MyScreenState extends State<MyScreen> {
                           ),
                           child: Row(
                             children: [
-                              Image.asset(
-                                'asset/image/lemon.png',
-                                width: 48,
-                              ),
+                              memory.url != ''
+                                  ? CachedNetworkImage(
+                                      imageUrl: memory.url,
+                                      width: 48,
+                                      height: 64,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'asset/image/lemon.png',
+                                      width: 48,
+                                    ),
                               const SizedBox(width: 16),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

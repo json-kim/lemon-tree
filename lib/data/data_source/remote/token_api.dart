@@ -49,9 +49,10 @@ class TokenApi {
   /// @param: content(String), woodName(String), themeId(int)
   /// @return: null
   Future<void> requestAddMemory(
-      String content, String woodName, int themeId) async {
+      String content, String woodName, int themeId, String url) async {
     final body = {
       ApiConstants.content: content,
+      ApiConstants.url: url,
       ApiConstants.woodName: woodName,
       ApiConstants.themeId: themeId,
       ApiConstants.private: 0,
@@ -65,9 +66,10 @@ class TokenApi {
   /// @param: content(String), treeId(int), themeId(int)
   /// @return: null
   Future<void> requestAddMemoryWithTree(
-      String content, int treeId, int themeId) async {
+      String content, int treeId, int themeId, String url) async {
     final body = {
       ApiConstants.content: content,
+      ApiConstants.url: url,
       ApiConstants.treeId: treeId,
       ApiConstants.themeId: themeId,
       ApiConstants.private: 0,

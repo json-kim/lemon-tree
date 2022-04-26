@@ -9,14 +9,15 @@ class MemoryRepositoryImpl implements MemoryRepository {
   MemoryRepositoryImpl(this._tokenApi);
 
   @override
-  Future<void> addMemory(String content, String woodName, int themeId) async {
-    await _tokenApi.requestAddMemory(content, woodName, themeId);
+  Future<void> addMemory(
+      String content, String woodName, int themeId, String url) async {
+    await _tokenApi.requestAddMemory(content, woodName, themeId, url);
   }
 
   @override
   Future<void> addMemoryWithTree(
-      String content, int treeId, int themeId) async {
-    await _tokenApi.requestAddMemoryWithTree(content, treeId, themeId);
+      String content, int treeId, int themeId, String url) async {
+    await _tokenApi.requestAddMemoryWithTree(content, treeId, themeId, url);
   }
 
   @override

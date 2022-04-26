@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lemon_tree/presentation/detail/detail_view_model.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,6 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   String getTimeDifference(DateTime date1, DateTime date2) {
-    print(date1.differenceInSeconds(date2));
     if (date1.differenceInDays(date2) > 0) {
       return '${date1.differenceInDays(date2)}일 전';
     } else if (date1.differenceInHours(date2) > 0) {
@@ -75,7 +75,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   height: 50.h,
                   color: Colors.white30,
                   alignment: Alignment.center,
-                  child: Image.asset('asset/image/lemon.png'),
+                  child: memory.url == ''
+                      ? Image.asset('asset/image/lemon.png')
+                      : CachedNetworkImage(
+                          imageUrl: memory.url,
+                        ),
                 ),
 
                 /**

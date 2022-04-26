@@ -1,12 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lemon_tree/core/di/provider_setting.dart';
-import 'package:lemon_tree/presentation/auth/auth_screen.dart';
 import 'package:lemon_tree/presentation/auth_gate.dart';
-import 'package:lemon_tree/presentation/home/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   final providers = await setProviders();
   runApp(MultiProvider(providers: providers, child: const MyApp()));
 }

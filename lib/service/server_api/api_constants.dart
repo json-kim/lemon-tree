@@ -9,6 +9,7 @@ class ApiConstants {
   static const String pw = 'pw';
   static const String name = 'name';
   static const String content = 'content';
+  static const String url = 'url';
   static const String memberId = 'member_id';
   static const String woodName = 'wood_name';
   static const String guName = 'gu_name';

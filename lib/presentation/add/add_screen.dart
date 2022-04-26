@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lemon_tree/presentation/add/add_event.dart';
 import 'package:lemon_tree/presentation/constants/colors.dart';
@@ -8,6 +10,7 @@ import 'package:lemon_tree/presentation/constants/data.dart';
 import 'package:lemon_tree/presentation/constants/ui_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:path/path.dart' as path;
 
 import 'add_view_model.dart';
 
@@ -19,6 +22,7 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
+  final ImagePicker _imagePicker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   StreamSubscription? _subscription;
 
@@ -79,6 +83,7 @@ class _AddScreenState extends State<AddScreen> {
     final viewModel = context.watch<AddViewModel>();
     final state = viewModel.state;
     final woodCounts = state.countResponse?.woodCounts;
+    final selectedImage = state.selectedImage;
 
     return Scaffold(
       backgroundColor: mainGreen,
@@ -104,6 +109,106 @@ class _AddScreenState extends State<AddScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          /**
+                           * 사진 선택 바
+                           */
+                          const Text('사진 선택',
+                              style: TextStyle(color: Colors.white)),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Stack(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          final pickedImage =
+                                              await _imagePicker.pickImage(
+                                                  maxWidth: 640,
+                                                  maxHeight: 480,
+                                                  source: ImageSource.gallery,
+                                                  imageQuality: 70);
+
+                                          if (pickedImage != null) {
+                                            final String fileName =
+                                                path.basename(pickedImage.path);
+                                            File imageFile =
+                                                File(pickedImage.path);
+                                            viewModel.onEvent(
+                                                AddEvent.imageSelect(
+                                                    imageFile));
+                                          }
+                                        },
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: selectedImage == null
+                                            ? Container(
+                                                height: 20.h,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white10,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: const [
+                                                    Icon(
+                                                        Icons
+                                                            .add_a_photo_outlined,
+                                                        color: Colors.white),
+                                                    SizedBox(height: 8),
+                                                    Text('사진 추가',
+                                                        style: defStyle),
+                                                  ],
+                                                ),
+                                              )
+                                            : Container(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white10,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  height: 20.h,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image: FileImage(
+                                                              selectedImage))),
+                                                ),
+                                              ),
+                                      ),
+                                      if (selectedImage != null)
+                                        Positioned(
+                                            top: 10,
+                                            right: 10,
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  viewModel.onEvent(
+                                                      const AddEvent
+                                                          .imageDelete());
+                                                },
+                                                icon: const Icon(
+                                                  Icons.cancel_outlined,
+                                                  color: mainGreen,
+                                                )))
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+
                           // ******************
                           // 나무 선택 드랍다운 버튼
                           // ******************
@@ -124,7 +229,7 @@ class _AddScreenState extends State<AddScreen> {
                                   alignment: Alignment.center,
                                   child: Text(
                                     state.selectedWood ?? '',
-                                    style: TextStyle(color: Colors.white),
+                                    style: defStyle,
                                     textAlign: TextAlign.center,
                                   ),
                                 )
@@ -208,8 +313,7 @@ class _AddScreenState extends State<AddScreen> {
                                       alignment: Alignment.center,
                                       child: Text(
                                         theme,
-                                        style: const TextStyle(
-                                            color: Colors.white),
+                                        style: defStyle,
                                       ),
                                     ),
                                   ),
@@ -226,8 +330,7 @@ class _AddScreenState extends State<AddScreen> {
                           // ******************
                           // 메모 텍스트 폼 필드
                           // ******************
-                          const Text('메모',
-                              style: TextStyle(color: Colors.white)),
+                          const Text('메모', style: defStyle),
                           const SizedBox(height: 4),
                           TextFormField(
                             validator: (value) {
@@ -243,7 +346,7 @@ class _AddScreenState extends State<AddScreen> {
                             // expands: true,
                             cursorColor: Colors.white,
                             keyboardType: TextInputType.multiline,
-                            style: const TextStyle(color: Colors.white),
+                            style: defStyle,
                             decoration: addFormDecoration.copyWith(
                               hintText: '메모를 입력해주세요',
                               hintStyle: const TextStyle(color: Colors.white),
