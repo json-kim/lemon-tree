@@ -45,14 +45,14 @@ class SearchViewModel with ChangeNotifier {
         searchWithContent: _searchWithContnet);
   }
 
-  void _woodSelect(String woodName) {
+  void _woodSelect(String? woodName) {
     _state = _state.copyWith(selectedWood: woodName);
 
     notifyListeners();
     _memoryPagingController.refresh();
   }
 
-  void _themeSelect(int themeId) {
+  void _themeSelect(int? themeId) {
     _state = _state.copyWith(selectedTheme: themeId);
 
     notifyListeners();

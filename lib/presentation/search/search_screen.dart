@@ -34,24 +34,6 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: mainGreen,
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   backgroundColor: Colors.transparent,
-      //   leading: null,
-      //   actions: [
-      //     IconButton(
-      //       onPressed: () {
-      //         // TODO:
-      //         // 검색 화면
-      //         // 검색 기능 구현
-      //       },
-      //       icon: const Icon(
-      //         Icons.search_outlined,
-      //         color: Colors.white,
-      //       ),
-      //     )
-      //   ],
-      // ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -133,10 +115,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                       .toList()
                                 ],
                                 onChanged: (val) {
-                                  if (val != null) {
-                                    viewModel
-                                        .onEvent(SearchEvent.themeSelect(val));
-                                  }
+                                  viewModel
+                                      .onEvent(SearchEvent.themeSelect(val));
                                 },
                               ),
                             ),
@@ -210,10 +190,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                       .toList()
                                 ],
                                 onChanged: (val) {
-                                  if (val != null) {
-                                    viewModel
-                                        .onEvent(SearchEvent.woodSelect(val));
-                                  }
+                                  viewModel
+                                      .onEvent(SearchEvent.woodSelect(val));
                                 },
                               ),
                             ),
